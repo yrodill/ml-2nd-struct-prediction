@@ -2,6 +2,8 @@
 <html>
 <head>
     <script type="text/javascript" , src="../javascript/seqFasta.js"></script>
+    <script type="text/javascript" , src="/home/yrodill/node_modules/libsvm-js/dist/browser/asm/libsvm.js"></script>
+    
 <meta charset="utf8">
 <title>StruBiGL</title>
 
@@ -48,6 +50,7 @@ function process(seq){
     
 
     console.log(objs)
+    
 
     
 }
@@ -60,7 +63,8 @@ let url = fetch("https://files.rcsb.org/view/1HHO.pdb").then((response)=>{
         console.log("Error Network")
     }
 }).then( (seq) => {
-    process(sequence)
+    process(sequence);
+    console.log("coucou");
 }
 
     )
