@@ -9,6 +9,7 @@ var http = require("http"),
     url  = require("url"),
     path = require("path"),
     fs   = require("fs"),
+    svm = require("libsvm-js"),
     port = process.argv[2] || 3000;
 
 http.createServer(function(request, response) {
