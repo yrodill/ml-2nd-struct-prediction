@@ -11,10 +11,35 @@
 
     <script type="module">
 
-        'use strict'; function process(data){ let result = []; let tab = dataset.split("\n>"); for(let i=0 ; i
-        <tab.length;i++){ if(tab[i] !="" && tab[i][0] !=">" ){ result.push(tab[i]) } } console.log(result); let objs=[ ]; for(let i=0 ; i < result.length;i++){
-            let matrix={ "A":0, "D":0, "R":0, "N":0, "C":0, "E":0, "Q":0, "G":0, "H":0, "I":0, "L":0, "K":0, "M":0, "F":0, "P":0, "S":0, "T":0, "W":0, "Y":0, "V":0}; for(let j=0;j<result[i].length;j++){ matrix[result[i][j]]+=1; } let len=result[i].length;
-            for(let key in matrix){ matrix[key]=matrix[key]/len; } objs[i]=matrix; } console.log(objs) } ///////////////////////MAIN/////////////////////// process(dataset); </script>
+        'use strict';
+        function process(data) {
+            let result = [];
+            let tab = dataset.split("\n");
+
+            for (let i = 0; i < tab.length; i++) {
+                let sequence = "";
+                if (tab[i] != "" && tab[i][0] != ">"){
+                while (tab[i] != "" && tab[i][0] != ">") {
+                    sequence += tab[i];
+                    i++;
+                }
+                result.push(sequence);
+            }
+            }
+            
+            console.log(result);
+
+            let objs = []; for (let i = 0; i < result.length; i++) {
+                let matrix = { "A": 0, "D": 0, "R": 0, "N": 0, "C": 0, "E": 0, "Q": 0, "G": 0, "H": 0, "I": 0, "L": 0, "K": 0, "M": 0, "F": 0, "P": 0, "S": 0, "T": 0, "W": 0, "Y": 0, "V": 0 }; for (let j = 0; j < result[i].length; j++) { matrix[result[i][j]] += 1; } let len = result[i].length;
+                for (let key in matrix) {
+                    matrix[key] = matrix[key] / len;
+                }
+                objs[i] = matrix;
+            } console.log(objs)
+        }
+        /*MAIN*/
+        process(dataset);
+    </script>
 </head>
 
 <body>
