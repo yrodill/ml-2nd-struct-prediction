@@ -1,76 +1,25 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <script type="text/javascript" , src="../javascript/seqFasta.js"></script>
     <script type="text/javascript" , src="../javascript/libsvm.js"></script>
-
-    
-<meta charset="utf8">
-<title>StruBiGL</title>
-
-<script type="module">
-
-// import {pipe,filter,merge,split} from '../src/common.js';
-// import {PDB} from '../src/pdb.js';
-// import {DS} from '../src/ds.js';
-// import {DSSP} from '../src/dssp.js';
-// import {S3D} from '../src/s3d.js';
-// import {ALI3D} from '../src/ALI3D.js';
+    <script type="text/javascript" , src="../data/mainlybeta.js"></script>
 
 
+    <meta charset="utf8">
+    <title>StruBiGL</title>
 
-'use strict';
+    <script type="module">
 
-function process(seq){
+        'use strict'; function process(seq){ let result = [] let tab = dataset.split("\n>"); for(let i=0 ; i
+        <tab.length;i++){ if(tab[i] !="" && tab[i][0] !=">" ){ result.push(tab[i]) } } console.log(result); let objs=[ ]; for(let i=0 ; i < result.length;i++){
+            let matrix={ "A":0, "D":0, "R":0, "N":0, "C":0, "E":0, "Q":0, "G":0, "H":0, "I":0, "L":0, "K":0, "M":0, "F":0, "P":0, "S":0, "T":0, "W":0, "Y":0, "V":0}; for(let j=0;j<result[i].length;j++){ matrix[result[i][j]]+=1; } let len=r esult[i].length;
+            for(let key in matrix){ matrix[key]=matrix[key]/len; } objs[i]=matrix; } console.log(objs) } /////////////////////// M A I N /////////////////////// let url=f etch( "https://files.rcsb.org/view/1HHO.pdb").then((response)=>{ if(response.ok){ return response.text(); } else{ console.log("Error Network") } }).then( (seq) => { process(sequence); } )
 
-    let result = []
-    let tab = sequence.split("\n");
-    for(let i=0 ; i<tab.length;i++){
-        if(tab[i] != "" && tab[i][0] != ">"){
-            result.push(tab[i])
-        }
-    }
-    console.log(result);
-
-    let objs = [];
-    
-    for(let i = 0 ; i < result.length;i++){
-        let matrix = {"A":0,"D":0,"R":0,"N":0,"C":0,"E":0,"Q":0,"G":0,"H":0,"I":0,"L":0,"K":0,"M":0,"F":0,"P":0,"S":0,"T":0,"W":0,"Y":0,"V":0};
-        for(let j=0;j<result[i].length;j++){
-            matrix[result[i][j]]+=1;
-        }
-        let len = result[i].length;
-        for(let key in matrix){
-            matrix[key]=matrix[key]/len;
-
-        }
-        objs[i]=matrix;
-    }
-
-
-    
-
-    console.log(objs)
-    
-
-    
-}
-/////////////////////// M A I N ///////////////////////
-let url = fetch("https://files.rcsb.org/view/1HHO.pdb").then((response)=>{
-    if(response.ok){
-        return response.text();
-    }
-    else{
-        console.log("Error Network")
-    }
-}).then( (seq) => {
-    process(sequence);
-}
-
-    )
-
-</script>
+    </script>
 </head>
+
 <body>
 </body>
+
 </html>
