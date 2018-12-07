@@ -2,16 +2,20 @@
 <html>
 
 <head>
-    <script type="text/javascript" , src="../javascript/libsvm.js"></script>
-    <script type="text/javascript" , src="../data/mainlybeta.js"></script>
-
-
+    
+    
     <meta charset="utf8">
     <title>StruBiGL</title>
-
+    
+    <script type="text/javascript" , src="../data/mainlybeta.js"></script>
+    <script type="text/javascript" , src="../javascript/libsvm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"> </script>
     <script type="module">
-
+        
         'use strict';
+        
+        // import {svm} from '../javascript/libsvm.js';
+
         function process(data) {
             let result = [];
             let tab = dataset.split("\n");
@@ -35,7 +39,11 @@
                     matrix[key] = matrix[key] / len;
                 }
                 objs[i] = matrix;
-            } console.log(objs)
+            }
+            console.log(objs);
+            const model = tf.sequential();
+            model.add(tf.layers.dense({units: 1, inputShape: [1]}));
+            console.log(model);
         }
         /*MAIN*/
         process(dataset);
