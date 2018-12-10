@@ -49,34 +49,31 @@
         /*MAIN*/
         var betaFeatures = process(dataset);
         var alphaTest = process(alpha);
-        var alphaHTest = process(alphaH)
+        var alphaHTest = process(alphaH);
 
         /*Training and inferences*/
         /* Features format : [{input:{features} , output:{beta:1,alpha:0}}]*/
         var net = new brain.NeuralNetwork();
-        var config = [{input:{},output:{}}];
+        var config = [];
 
-        for (var features in betaFeatures) {
-            config.push({input:{features},output:{beta:1,alpha:0}});
-        }
-        for (var features in alphaTest) {
-            config.push({input:{features},output:{beta:0,alpha:1}});
-        }
+        
+        betaFeatures.forEach(function(arrayItem){
+            config.push({input:arrayItem,output:{beta:1,alpha:0}});
+        });
+
+        alphaTest.forEach(function(arrayItem){
+            config.push({input:arrayItem,output:{beta:0,alpha:1}});
+        });
+
+
         net.train(config);
-
-        console.log(net);
-
-
-        // for (var features in alphaHTest) {
-        //     net.train([{ input: features, output: { beta: 0, alpha: 1 } }]);
-        // }
-
-        // console.log(net);
-
-        for (var features in alphaHTest) {
-            var output = net.run(features)  // { white: 0.99, black: 0.002 }
+        
+        /*Test on alphaH */
+        alphaHTest.forEach(function(arrayItem){
+            var output = net.run(arrayItem);
             console.log(output);
-        }
+        });
+
     </script>
 </head>
 
