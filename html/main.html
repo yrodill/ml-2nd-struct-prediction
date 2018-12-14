@@ -2,16 +2,11 @@
 <html>
 
 <head>
-
-
     <meta charset="utf8">
     <title>StruBiGL</title>
+</head>
 
-    <script type="text/javascript" , src="../data/mainlybeta.js"></script>
-    <script type="text/javascript" , src="../data/mainlyalphaG.js"></script>
-    <script type="text/javascript" , src="../data/alphaH.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"> </script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brain/0.6.3/brain.js"></script>
+<body>
     <script type="module">
 
         'use strict';
@@ -20,6 +15,8 @@
 
         function process(data) {
             let result = [];
+
+            /* Read data from fasta format*/
             let tab = data.split("\n");
 
             for (let i = 0; i < tab.length; i++) {
@@ -34,8 +31,10 @@
             }
 
             console.log(result);
-
-            let betaFeatures = []; for (let i = 0; i < result.length; i++) {
+            
+            /*Calc features for the sequences in the fasta file*/
+            let betaFeatures = [];
+            for (let i = 0; i < result.length; i++) {
                 let matrix = { "A": 0, "D": 0, "R": 0, "N": 0, "C": 0, "E": 0, "Q": 0, "G": 0, "H": 0, "I": 0, "L": 0, "K": 0, "M": 0, "F": 0, "P": 0, "S": 0, "T": 0, "W": 0, "Y": 0, "V": 0 }; for (let j = 0; j < result[i].length; j++) { matrix[result[i][j]] += 1; } let len = result[i].length;
                 for (let key in matrix) {
                     matrix[key] = matrix[key] / len;
@@ -69,15 +68,32 @@
         net.train(config);
         
         /*Test on alphaH */
+        var result = [];
         alphaHTest.forEach(function(arrayItem){
             var output = net.run(arrayItem);
             console.log(output);
+            result.push(output);
         });
 
-    </script>
-</head>
+        /*Calc % of true positives using a threshold*/
+        var positives = [];
+        result.forEach(function(value,index,array){
+            if(result[index].alpha >= 0.8){
+                positives.push(result[index].alpha);
+            }
+        });
+        console.log(positives);
+        var truePos = positives.length / result.length;
+        var roundedTruePos = Math.round(truePos * 100) / 100;
+        console.log(`True positives % : ${roundedTruePos}`)
 
-<body>
+    </script>
 </body>
+
+<script type="text/javascript" , src="../data/mainlybeta.js"></script>
+<script type="text/javascript" , src="../data/mainlyalphaG.js"></script>
+<script type="text/javascript" , src="../data/alphaH.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"> </script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brain/0.6.3/brain.js"></script>
 
 </html>
