@@ -21,7 +21,7 @@
 
             for (let i = 0; i < tab.length; i++) {
                 let sequence = "";
-                if (tab[i] != "" && tab[i][0] != ">") {
+                if (tab[i] != "" && tab[i][0] != ">") { //remove "\n" and concatenate untill reaches a new ">" 
                     while (tab[i] != "" && tab[i][0] != ">") {
                         sequence += tab[i];
                         i++;
@@ -31,18 +31,18 @@
             }
 
             console.log(result);
-            
+
             /*Calc features for the sequences in the fasta file*/
-            let betaFeatures = [];
+            let features = [];
             for (let i = 0; i < result.length; i++) {
                 let matrix = { "A": 0, "D": 0, "R": 0, "N": 0, "C": 0, "E": 0, "Q": 0, "G": 0, "H": 0, "I": 0, "L": 0, "K": 0, "M": 0, "F": 0, "P": 0, "S": 0, "T": 0, "W": 0, "Y": 0, "V": 0 }; for (let j = 0; j < result[i].length; j++) { matrix[result[i][j]] += 1; } let len = result[i].length;
                 for (let key in matrix) {
                     matrix[key] = matrix[key] / len;
                 }
-                betaFeatures[i] = matrix;
+                features[i] = matrix;
             }
-            console.log(betaFeatures);
-            return betaFeatures;
+            console.log(features);
+            return features;
 
         }
         /*MAIN*/
@@ -55,37 +55,30 @@
         var net = new brain.NeuralNetwork();
         var config = [];
 
-        
-        betaFeatures.forEach(function(arrayItem){
-            config.push({input:arrayItem,output:{beta:1,alpha:0}});
+        /*Train classifier on alphaG & beta*/
+        betaFeatures.forEach(function (arrayItem) {
+            config.push({ input: arrayItem, output: { beta: 1, alpha: 0 } });
         });
 
-        alphaTest.forEach(function(arrayItem){
-            config.push({input:arrayItem,output:{beta:0,alpha:1}});
+        alphaTest.forEach(function (arrayItem) {
+            config.push({ input: arrayItem, output: { beta: 0, alpha: 1 } });
         });
-
 
         net.train(config);
-        
-        /*Test on alphaH */
+
+        /*Test classifier on alphaH */
         var result = [];
-        alphaHTest.forEach(function(arrayItem){
+        alphaHTest.forEach(function (arrayItem) {
             var output = net.run(arrayItem);
             console.log(output);
             result.push(output);
         });
 
         /*Calc % of true positives using a threshold*/
-        var positives = [];
-        result.forEach(function(value,index,array){
-            if(result[index].alpha >= 0.8){
-                positives.push(result[index].alpha);
-            }
-        });
-        console.log(positives);
-        var truePos = positives.length / result.length;
+        const filterTruePos = result.filter(property => property.alpha >= 0.8);
+        var truePos = filterTruePos.length / result.length;
         var roundedTruePos = Math.round(truePos * 100) / 100;
-        console.log(`True positives % : ${roundedTruePos}`)
+        console.log(`True positives % : ${roundedTruePos}`);
 
     </script>
 </body>
