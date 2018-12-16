@@ -32,13 +32,72 @@
 
             console.log(result);
 
-            /*Calc features for the sequences in the fasta file*/
+            /*Hydrophobicity Kyte-Doolittle scale
+            Isoleucine 	I 	4.5
+            Valine 	V 	4.2
+            Leucine 	L 	3.8
+            Phenylalanine 	F 	2.8
+            Cysteine 	C 	2.5
+            Methionine 	M 	1.9
+            Alanine 	A 	1.8
+            Glycine 	G 	-0.4
+            Threonine 	T 	-0.7
+            Serine 	S 	-0.8
+            Tryptophan 	W 	-0.9
+            Tyrosine 	Y 	-1.3
+            Proline 	P 	-1.6
+            Histidine 	H 	-3.2
+            Glutamic acid 	E 	-3.5
+            Glutamine 	Q 	-3.5
+            Aspartic acid 	D 	-3.5
+            Asparagine 	N 	-3.5
+            Lysine 	K 	-3.9
+            Arginine 	R 	-4.5
+            */
+
+            let KDHydrophobicity = { "I": 4.5, "V": 4.2, "L": 3.8, "F": 2.8, "C": 2.5, "M": 1.9, "A": 1.8, "G": -0.4, "T": -0.7, "S": -0.8, "W": -0.9, "Y": -1.3, "P": -1.6, "H": -3.2, "E": -3.5, "Q": -3.5, "D": -3.5, "N": -3.5, "K": -3.9, "R": -4.5 };
+            let H = [];
+            let averageH = 0;
+            
+            //On calcule l'hydrophibicité de l'élément central en prenant une chaîne de 7 AA ref: http://perso.ibcp.fr/gilbert.deleage/Cours/BIOINFO_hydrophobie.html
+            for (let i = 0; i < result.length; i++) {
+                let hydropathie = [];
+                for (let j = 0; j < result[i].length; j++) {
+                    if (j > 2 && j<result[i].length-3) {
+                        averageH = (KDHydrophobicity[result[i][j-3]] + KDHydrophobicity[result[i][j-2]] + KDHydrophobicity[result[i][j-1]]
+                        + KDHydrophobicity[result[i][j]] + KDHydrophobicity[result[i][j+1]] + KDHydrophobicity[result[i][j+2]] + KDHydrophobicity[result[i][j+3]])/7;
+                        hydropathie.push(averageH);
+                    }
+                    else{
+                        averageH = KDHydrophobicity[result[i][j]];
+                        hydropathie.push(averageH);
+                    }
+                }
+                let averageHydropathie = 0;
+                for(let k = 0;k<hydropathie.length;k++){
+                    averageHydropathie += hydropathie[k];
+                }
+                averageHydropathie /= hydropathie.length;
+                H.push(averageHydropathie)
+
+            }
+            console.log("Tableau d'hydrophobicité : ", H);
+
+            /*Calc features for the sequences in the fasta file
+            Infos : AA impliqués dans la formation des hélices alpha : MALEK
+                    AA impliqués dans la formation des feuillets beta: FYWTVIL et P aux extrémités.
+            */
             let features = [];
             for (let i = 0; i < result.length; i++) {
-                let matrix = { "A": 0, "D": 0, "R": 0, "N": 0, "C": 0, "E": 0, "Q": 0, "G": 0, "H": 0, "I": 0, "L": 0, "K": 0, "M": 0, "F": 0, "P": 0, "S": 0, "T": 0, "W": 0, "Y": 0, "V": 0 }; for (let j = 0; j < result[i].length; j++) { matrix[result[i][j]] += 1; } let len = result[i].length;
+                let matrix = { "A": 0, "D": 0, "R": 0, "N": 0, "C": 0, "E": 0, "Q": 0, "G": 0, "H": 0, "I": 0, "L": 0, "K": 0, "M": 0, "F": 0, "P": 0, "S": 0, "T": 0, "W": 0, "Y": 0, "V": 0 };
+                for (let j = 0; j < result[i].length; j++) {
+                    matrix[result[i][j]] += 1;
+                }
+                let len = result[i].length;
                 for (let key in matrix) {
                     matrix[key] = matrix[key] / len;
                 }
+                matrix["hydrophibicity"] = H[i];
                 features[i] = matrix;
             }
             console.log(features);
