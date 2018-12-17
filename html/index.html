@@ -11,7 +11,7 @@
 
         'use strict';
 
-        function testOnData(sequence, repliement) {
+        function testOnData(sequence, threshold) {
 
             /*run on data*/
             var result = [];
@@ -22,11 +22,18 @@
             });
 
             /*Calc % of true positives using a threshold*/
-            const filterTruePos = result.filter(property => property[repliement] >= 0.8);
-            var truePos = filterTruePos.length / result.length;
-            var roundedTruePos = Math.round(truePos * 100) / 100;
-            console.log(`Test sur des protéines majoritairements ${repliement}`);
-            console.log(`True positives : ${roundedTruePos*100}%`);
+            const filterAlpha = result.filter(property => property.alpha >= threshold);
+            const filterBeta = result.filter(property => property.beta >= threshold);
+
+            var trueAlpha = filterAlpha.length / result.length;
+            var roundedTrueAlpha = Math.round(trueAlpha * 100) / 100;
+            var trueBeta = filterBeta.length / result.length;
+            var roundedTrueBeta = Math.round(trueBeta * 100) / 100;
+
+            console.log(`Test pour alpha`);
+            console.log(`True positives : ${roundedTrueAlpha*100}%`);
+            console.log(`Test pour beta`);
+            console.log(`True positives : ${roundedTrueBeta*100}%`);
 
         }
 
@@ -155,11 +162,15 @@
         net.train(config);
 
         /*Test classifier*/
-        testOnData(test1,"beta");
-        testOnData(test2,"beta");
-        testOnData(test3,"beta");
-        testOnData(test4,"alpha");
-        testOnData(test5,"alpha");
+        testOnData(test1,0.8);
+        console.log("-------------------------------------------------------------------");
+        testOnData(test2,0.8);
+        console.log("-------------------------------------------------------------------");
+        testOnData(test3,0.8);
+        console.log("-------------------------------------------------------------------");
+        testOnData(test4,0.8);
+        console.log("-------------------------------------------------------------------");
+        testOnData(test5,0.8);
 
 
     </script>
