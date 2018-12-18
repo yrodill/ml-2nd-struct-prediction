@@ -11,6 +11,42 @@
 
         'use strict';
 
+        function createDipeptideObj() {
+            let dipeptidesInit = {};
+            let AAs = ["A", "D", "R", "N", "C", "E", "Q", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"];
+            AAs.forEach(function (element) {
+                for (let j = 0; j < AAs.length; j++) {
+                    let word = element + AAs[j];
+                    dipeptidesInit[word] = 0;
+                }
+            });
+            return dipeptidesInit;
+
+        }
+
+
+        function calcDipeptideFeatures(result, arrayOfHydrophibicity) {
+            let features = [];
+            for (let i = 0; i < result.length; i++) {
+                let dipeptides = createDipeptideObj();
+                for (let j = 0; j < result[i].length - 1; j++) {
+                    let word = result[i][j] + result[i][j + 1];
+                    dipeptides[word] += 1;
+                }
+                let len = result[i].length - 1;
+                for (let key in dipeptides) {
+                    dipeptides[key] = dipeptides[key] / len;
+                }
+                dipeptides["hydrophibicity"] = arrayOfHydrophibicity[i];
+                features[i] = dipeptides;
+            }
+            // console.log(features);
+            return features;
+
+
+
+        }
+
         function testOnData(sequence, threshold) {
 
             /*run on data*/
@@ -31,9 +67,9 @@
             var roundedTrueBeta = Math.round(trueBeta * 100) / 100;
 
             console.log(`Test pour alpha`);
-            console.log(`True positives : ${roundedTrueAlpha*100}%`);
+            console.log(`True positives : ${roundedTrueAlpha * 100}%`);
             console.log(`Test pour beta`);
-            console.log(`True positives : ${roundedTrueBeta*100}%`);
+            console.log(`True positives : ${roundedTrueBeta * 100}%`);
 
         }
 
@@ -55,6 +91,8 @@
                     result.push(sequence);
                 }
             }
+
+            // console.log(test);
 
             // console.log(result);
 
@@ -109,6 +147,12 @@
             }
             // console.log("Tableau d'hydrophobicité : ", H);
 
+            /*Test for 400 features
+            Processing time really high and 100% alpha always => overfitting ?*/
+            // let features = calcDipeptideFeatures(result, H);
+            // console.log("Tableau de features : ",features);
+            // return features;
+
             /*Calc features for the sequences in the fasta file
             Infos : AA impliqués dans la formation des hélices alpha : MALEK
                     AA impliqués dans la formation des feuillets beta: FYWTVIL et P aux extrémités.
@@ -134,6 +178,8 @@
         var betaFeatures = process(dataset);
         var alphaTest = process(alpha);
         var alphaHTest = process(alphaH);
+        var alphasGlob = process(alphas);
+        var betasGlob = process(betas);
         var test1 = process(Test1);
         var test2 = process(Test2);
         var test3 = process(Test3);
@@ -150,27 +196,39 @@
         betaFeatures.forEach(function (arrayItem) {
             config.push({ input: arrayItem, output: { beta: 1, alpha: 0 } });
         });
+        // betasGlob.forEach(function (arrayItem) {
+        //     config.push({ input: arrayItem, output: { beta: 1, alpha: 0 } });
+        // });
 
         alphaTest.forEach(function (arrayItem) {
             config.push({ input: arrayItem, output: { beta: 0, alpha: 1 } });
         });
+        // alphasGlob.forEach(function (arrayItem) {
+        //     config.push({ input: arrayItem, output: { beta: 0, alpha: 1 } });
+        // });
 
         alphaHTest.forEach(function (arrayItem) {
             config.push({ input: arrayItem, output: { beta: 0, alpha: 1 } });
         });
 
+        console.log("Training has begun ! Wait...");
         net.train(config);
+        console.log("Training, done. Yay!");
 
         /*Test classifier*/
-        testOnData(test1,0.8);
+        testOnData(test1, 0.8);
         console.log("-------------------------------------------------------------------");
-        testOnData(test2,0.8);
+        testOnData(test2, 0.8);
         console.log("-------------------------------------------------------------------");
-        testOnData(test3,0.8);
+        testOnData(test3, 0.8);
         console.log("-------------------------------------------------------------------");
-        testOnData(test4,0.8);
+        testOnData(test4, 0.8);
         console.log("-------------------------------------------------------------------");
-        testOnData(test5,0.8);
+        testOnData(test5, 0.8);
+        console.log("-------------------------------------------------------------------");
+        testOnData(betasGlob, 0.8);
+        console.log("-------------------------------------------------------------------");
+        testOnData(alphasGlob, 0.8);
 
 
     </script>
@@ -179,6 +237,8 @@
 <script type="text/javascript" , src="../data/mainlybeta.js"></script>
 <script type="text/javascript" , src="../data/mainlyalphaG.js"></script>
 <script type="text/javascript" , src="../data/alphaH.js"></script>
+<script type="text/javascript" , src="../data/mainlybetaAnthropleurine.js"></script>
+<script type="text/javascript" , src="../data/mainlyalphaglob.js"></script>
 <script type="text/javascript" , src="../data/datatest/Test1.js"></script>
 <script type="text/javascript" , src="../data/datatest/Test2.js"></script>
 <script type="text/javascript" , src="../data/datatest/Test3.js"></script>
