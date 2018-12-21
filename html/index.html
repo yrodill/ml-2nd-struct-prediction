@@ -150,7 +150,7 @@
             /*Test for 400 features
             Processing time really high and 100% alpha always => overfitting ?*/
             // let features = calcDipeptideFeatures(result, H);
-            // console.log("Tableau de features : ",features);
+            // console.log("Tableau de features : ", features);
             // return features;
 
             /*Calc features for the sequences in the fasta file
@@ -186,9 +186,41 @@
         var test4 = process(Test4);
         var test5 = process(Test5);
 
+        // console.log(betaFeatures);
+        // var f = [];
+        // var keys = [];
+        
+        // for (let i = 0; i < betaFeatures.length; i++) {
+        //     var arr = [];
 
-        /*Training and inferences*/
-        /* Features format : [{input:{features} , output:{beta:1,alpha:0}}]*/
+        //     for(var key in betaFeatures[i]){
+        //         arr.push(betaFeatures[i][key]);
+        //         if(i==0){
+        //         keys.push(key);
+        //         }
+        //     }
+        //     f.push(arr);
+        // }
+        // console.log(keys);
+        // console.log(f);
+
+        // var vectors = PCA.getEigenVectors(f);
+        // console.log("PCA result :", vectors);
+
+        // var adData = PCA.computeAdjustedData(f, vectors[0]);
+        // console.log(adData);
+
+        // var feat = [];
+        // for(let i=0;i<keys.length;i++){
+        //     var dic = {};
+        //     dic[keys[i]] = vectors[i].eigenvalue;
+        //     feat.push(dic);
+        // }
+        // console.log("Final features : ",feat);
+
+
+        // /*Training and inferences*/
+        // /* Features format : [{input:{features} , output:{beta:1,alpha:0}}]*/
         var net = new brain.NeuralNetwork();
         var config = [];
 
@@ -215,7 +247,7 @@
         net.train(config);
         console.log("Training, done. Yay!");
 
-        /*Test classifier*/
+        // /*Test classifier*/
         testOnData(test1, 0.8);
         console.log("-------------------------------------------------------------------");
         testOnData(test2, 0.8);
@@ -246,5 +278,7 @@
 <script type="text/javascript" , src="../data/datatest/Test5.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.13.3/dist/tf.min.js"> </script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/brain/0.6.3/brain.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/pca-js@1.0.0/pca.min.js"></script>
+
 
 </html>
