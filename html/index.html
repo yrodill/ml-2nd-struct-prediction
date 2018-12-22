@@ -11,6 +11,55 @@
 
         'use strict';
 
+        // function getListOfFeaturesOfInterest(obj1, obj2) {
+        //     let result = [];
+        //     result = [];
+
+        //     for (let i = 0; i < obj1.length; i++) {
+        //         for (let key in obj1[i]) {
+        //             if (obj1[i][key] === 0) {
+        //                 result.push(key);
+        //             }
+        //         }
+        //     }
+        //     for (let i = 0; i < obj2.length; i++) {
+        //         for (let key in obj2[i]) {
+        //             if (obj2[i][key] === 0) {
+        //                 result.push(key);
+        //             }
+        //         }
+        //     }
+
+        //     let dic = {};
+
+        //     for (let i = 0; i < result.length; i++) {
+        //         dic[result[i]] = 0;
+        //     }
+        //     for (let i = 0; i < result.length; i++) {
+        //         dic[result[i]] += 1;
+        //     }
+        //     for (let key in dic) {
+        //         if (dic[key] < 200) {
+        //             delete dic[key];
+        //         }
+        //     }
+        //     // console.log(Object.keys(dic).length);
+        //     return dic;
+        // }
+
+        // function reduceDimensions(obj, listOfFeaturesOfInterest) {
+
+        //     for (let i = 0; i < obj.length; i++) {
+
+        //         for (let key in obj[i]) {
+        //             if (key in listOfFeaturesOfInterest) {
+        //                 delete obj[i][key];
+        //             }
+        //         }
+        //     }
+        //     return obj;
+        // }
+
         function createDipeptideObj() {
             let dipeptidesInit = {};
             let AAs = ["A", "D", "R", "N", "C", "E", "Q", "G", "H", "I", "L", "K", "M", "F", "P", "S", "T", "W", "Y", "V"];
@@ -46,6 +95,7 @@
 
 
         }
+
 
         function testOnData(sequence, threshold) {
 
@@ -186,10 +236,23 @@
         var test4 = process(Test4);
         var test5 = process(Test5);
 
+        // let listOfFeatures = getListOfFeaturesOfInterest(betaFeatures, alphaTest);
+        // betaFeatures = reduceDimensions(betaFeatures, listOfFeatures);
+        // alphaTest = reduceDimensions(alphaTest, listOfFeatures);
+        // alphaHTest = reduceDimensions(alphaHTest, listOfFeatures);
+        // alphasGlob = reduceDimensions(alphasGlob, listOfFeatures);
+        // betasGlob = reduceDimensions(betasGlob, listOfFeatures);
+        // test1 = reduceDimensions(test1, listOfFeatures);
+        // test2 = reduceDimensions(test2, listOfFeatures);
+        // test3 = reduceDimensions(test3, listOfFeatures);
+        // test4 = reduceDimensions(test4, listOfFeatures);
+        // test5 = reduceDimensions(test5, listOfFeatures);
+
         // console.log(betaFeatures);
+
         // var f = [];
         // var keys = [];
-        
+
         // for (let i = 0; i < betaFeatures.length; i++) {
         //     var arr = [];
 
@@ -248,19 +311,20 @@
         console.log("Training, done. Yay!");
 
         // /*Test classifier*/
-        testOnData(test1, 0.8);
+        let threshold=0.9;
+        testOnData(test1,threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(test2, 0.8);
+        testOnData(test2, threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(test3, 0.8);
+        testOnData(test3, threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(test4, 0.8);
+        testOnData(test4, threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(test5, 0.8);
+        testOnData(test5, threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(betasGlob, 0.8);
+        testOnData(betasGlob, threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(alphasGlob, 0.8);
+        testOnData(alphasGlob, threshold);
 
 
     </script>
