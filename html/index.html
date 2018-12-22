@@ -107,7 +107,8 @@
                 result.push(output);
             });
 
-            /*Calc % of true positives using a threshold*/
+            /*Calc % of true positives using a threshold
+            threshold must be between 0 and 1*/
             const filterAlpha = result.filter(property => property.alpha >= threshold);
             const filterBeta = result.filter(property => property.beta >= threshold);
 
@@ -288,12 +289,16 @@
         var config = [];
 
         /*Train classifier on alphaG & beta*/
-        betaFeatures.forEach(function (arrayItem) {
+        test2.forEach(function (arrayItem) {
             config.push({ input: arrayItem, output: { beta: 1, alpha: 0 } });
         });
         // betasGlob.forEach(function (arrayItem) {
         //     config.push({ input: arrayItem, output: { beta: 1, alpha: 0 } });
         // });
+        test3.forEach(function (arrayItem) {
+            config.push({ input: arrayItem, output: { beta: 1, alpha: 0 } });
+        });
+
 
         alphaTest.forEach(function (arrayItem) {
             config.push({ input: arrayItem, output: { beta: 0, alpha: 1 } });
@@ -311,20 +316,20 @@
         console.log("Training, done. Yay!");
 
         // /*Test classifier*/
-        let threshold=0.9;
-        testOnData(test1,threshold);
+        let threshold=0.8;
+        // testOnData(test1,threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(test2, threshold);
+        testOnData(betaFeatures, threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(test3, threshold);
-        console.log("-------------------------------------------------------------------");
+        // testOnData(test3, threshold);
+        // console.log("-------------------------------------------------------------------");
         testOnData(test4, threshold);
         console.log("-------------------------------------------------------------------");
         testOnData(test5, threshold);
         console.log("-------------------------------------------------------------------");
-        testOnData(betasGlob, threshold);
-        console.log("-------------------------------------------------------------------");
-        testOnData(alphasGlob, threshold);
+        // testOnData(betasGlob, threshold);
+        // console.log("-------------------------------------------------------------------");
+        // testOnData(alphasGlob, threshold);
 
 
     </script>
