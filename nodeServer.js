@@ -45,4 +45,4 @@ http.createServer(function(request, response) {
     });
 }).listen(parseInt(port, 10));
 
-console.log("Static file server running at => http://localhost:" + port + "/\nCTRL + C to shutdown");
+console.log("Static file server running at => http://localhost:" + port + "/html/index.html" + "\nCTRL + C to shutdown");
