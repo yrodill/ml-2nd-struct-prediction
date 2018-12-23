@@ -174,7 +174,7 @@ net.train(config, {
 console.log("Training, done. Yay!");
 
 // /*Test classifier*/
-let threshold = 0.8;
+let threshold = 0.9;
 
 testOnData(betaFeatures, threshold);
 console.log("-------------------------------------------------------------------");
